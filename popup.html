@@ -16,13 +16,22 @@
     }
     li {
       margin-bottom: 5px;
-      font-size: 16px;
+      display: flex;
+      justify-content: space-between;
+    }
+    button {
+      background-color: rgba(4, 184, 249, 0.891);
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
   <h2>Saved Words</h2>
   <ul id="wordList"></ul>
+  <button id="clearAll">Clear All Words</button>
   <script src="popup.js"></script>
 </body>
 </html>
