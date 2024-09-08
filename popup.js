@@ -5,6 +5,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // Debugging to check if DOM elements are available
   const wordList = document.getElementById("wordList");
   const clearAllButton = document.getElementById("clearAll");
+  const exportButton = document.getElementById("exportWords");
+
 
   // Function to display saved words from storage
   function displayWords() {
@@ -50,6 +52,31 @@ document.addEventListener("DOMContentLoaded", () => {
     // Set an empty array in local storage to clear all words
     chrome.storage.local.set({ words: [] }, () => {
       displayWords(); // Refresh the displayed list (it will be empty)
+    });
+  };
+
+  // Export words as CSV file
+  exportButton.onclick = () => {
+    chrome.storage.local.get({ words: [] }, (result) => {
+      const words = result.words;
+
+      // Prepare CSV content
+      let csvContent = "data:text/csv;charset=utf-8,";  // CSV header
+      
+      // csvContent += "Word\n";  // Add a header row
+
+      // Add words to CSV content
+      words.forEach((word) => {
+        const dateSaved = new Date().toLocaleString();  // Example: add current date as saved date
+        csvContent += word + "\n";  // Each word on a new line
+        // csvContent += `${word}, ${dateSaved}\n`;
+      });
+
+      // Create a link element to download the CSV file
+      const link = document.createElement('a');
+      link.href = encodeURI(csvContent);
+      link.download = 'saved_words.csv';  // The filename
+      link.click();  // Trigger the download
     });
   };
 
