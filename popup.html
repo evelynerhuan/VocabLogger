@@ -5,34 +5,64 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Saved Words</title>
   <style>
+    /* Set a wider width for the popup */
     body {
       font-family: Arial, sans-serif;
       padding: 10px;
-      min-width: 200px;
+      width: 350px; /* Increase the width for better layout */
     }
-    ul {
-      list-style-type: none;
-      padding: 0;
-    }
-    li {
-      margin-bottom: 5px;
+
+    /* Container for each word item */
+    .word-container {
       display: flex;
       justify-content: space-between;
+      align-items: flex-start;
+      padding: 10px 0;
+      border-bottom: 1px solid #ddd;
     }
-    button {
-      background-color: rgba(4, 184, 249, 0.891);
+
+    /* Word and definition are placed in a column */
+    .word-definition {
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;  /* Allow this section to grow and fill available space */
+      margin-right: 10px;  /* Add space between word/definition and delete button */
+    }
+
+    .delete-button {
+      background-color: #00aaff;
       color: white;
       border: none;
       padding: 5px 10px;
       cursor: pointer;
+      height: fit-content;
+    }
+
+    /* Styling for definition text */
+    .definition {
+      font-size: 12px;
+      color: #555;
+      margin-top: 5px;
+      word-wrap: break-word;  /* Ensure the text wraps properly */
+    }
+
+    /* General styling for buttons */
+    #clearAll, #exportWords {
+      background-color: #00aaff;
+      color: white;
+      border: none;
+      padding: 10px;
+      margin: 10px 0;
+      cursor: pointer;
+      width: 100%;
     }
   </style>
 </head>
 <body>
   <h2>Saved Words</h2>
-  <ul id="wordList"></ul>
+  <div id="wordList"></div>
   <button id="clearAll">Clear All Words</button>
-  <button id="exportWords" class="export-button">Export as CSV</button>
+  <button id="exportWords">Export as CSV</button>
   <script src="popup.js"></script>
 </body>
 </html>
