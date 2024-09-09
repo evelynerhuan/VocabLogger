@@ -5,14 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Saved Words</title>
   <style>
-    /* Set a wider width for the popup */
     body {
       font-family: Arial, sans-serif;
       padding: 10px;
-      width: 350px; /* Increase the width for better layout */
+      width: 350px;
     }
 
-    /* Container for each word item */
     .word-container {
       display: flex;
       justify-content: space-between;
@@ -21,15 +19,14 @@
       border-bottom: 1px solid #ddd;
     }
 
-    /* Word and definition are placed in a column */
     .word-definition {
       display: flex;
       flex-direction: column;
-      flex-grow: 1;  /* Allow this section to grow and fill available space */
-      margin-right: 10px;  /* Add space between word/definition and delete button */
+      flex-grow: 1;
+      margin-right: 10px;
     }
 
-    .delete-button {
+    .delete-button, .status-button {
       background-color: #00aaff;
       color: white;
       border: none;
@@ -38,15 +35,23 @@
       height: fit-content;
     }
 
-    /* Styling for definition text */
+    .delete-button {
+      margin-right: 10px;  /* Add space between Delete and Learned/Unlearned button */
+    }
+
     .definition {
       font-size: 12px;
       color: #555;
       margin-top: 5px;
-      word-wrap: break-word;  /* Ensure the text wraps properly */
+      word-wrap: break-word;
     }
 
-    /* General styling for buttons */
+    /* Style for learned words */
+    .learned {
+      background-color: #e0e0e0;  /* Light gray background for learned words */
+      color: #888;  /* Gray text for learned words */
+    }
+
     #clearAll, #exportWords {
       background-color: #00aaff;
       color: white;
