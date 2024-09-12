@@ -113,38 +113,55 @@ exportButton.onclick = () => {
 };
 
   // Function to fetch word definition from Dictionary API and cache it
-  function fetchWordDefinition(word, container) {
-    const apiUrl = `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`;
+function fetchWordDefinition(word, container) {
+  const apiUrl = `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`;
 
-    fetch(apiUrl)
-      .then(response => response.json())
-      .then(data => {
-        const definition = data[0]?.meanings[0]?.definitions[0]?.definition || 'Definition not found';
-        displayDefinition(definition, container);
+  fetch(apiUrl)
+    .then(response => response.json())
+    .then(data => {
+      const meanings = data[0]?.meanings || [];
+      const definitions = meanings.flatMap(meaning => meaning.definitions.map(def => def.definition));
 
-        // Cache the definition
-        chrome.storage.local.get({ definitions: {} }, (result) => {
-          const definitions = result.definitions;
-          definitions[word] = definition;  // Store the definition in cache
-          chrome.storage.local.set({ definitions });
-        });
-      })
-      .catch(error => {
-        console.error('Error fetching definition:', error);
-        const errorElement = document.createElement('p');
-        errorElement.textContent = 'Definition not found';
-        errorElement.classList.add('definition');
-        container.appendChild(errorElement);  // Display error if definition is not found
+      if (definitions.length > 0) {
+        displayDefinitions(definitions, container);
+      } else {
+        displayDefinition('Definition not found', container);
+      }
+
+      // Cache the definitions
+      chrome.storage.local.get({ definitions: {} }, (result) => {
+        const cachedDefinitions = result.definitions;
+        cachedDefinitions[word] = definitions.join(' | ');  // Join all definitions with a separator
+        chrome.storage.local.set({ definitions: cachedDefinitions });
       });
-  }
+    })
+    .catch(error => {
+      console.error('Error fetching definition:', error);
+      displayDefinition('Definition not found', container);
+    });
+}
 
-  // Function to display the definition in the list
-  function displayDefinition(definition, container) {
-    const definitionElement = document.createElement('p');
-    definitionElement.textContent = `Definition: ${definition}`;
-    definitionElement.classList.add('definition');
-    container.appendChild(definitionElement);  // Display the definition
-  }
+// Function to display multiple definitions in the list
+function displayDefinitions(definitions, container) {
+  const definitionElement = document.createElement('ul');  // Create a list to hold multiple definitions
+  definitionElement.classList.add('definition');
+
+  definitions.forEach((def, index) => {
+    const listItem = document.createElement('li');
+    listItem.textContent = `${index + 1}. ${def}`;
+    definitionElement.appendChild(listItem);  // Add each definition as a list item
+  });
+
+  container.appendChild(definitionElement);  // Display the list of definitions
+}
+
+// Function to display a single definition
+function displayDefinition(definition, container) {
+  const definitionElement = document.createElement('p');
+  definitionElement.textContent = `Definition: ${definition}`;
+  definitionElement.classList.add('definition');
+  container.appendChild(definitionElement);
+}
 
   // Function to toggle the learning status of a word
   function toggleLearningStatus(word) {
